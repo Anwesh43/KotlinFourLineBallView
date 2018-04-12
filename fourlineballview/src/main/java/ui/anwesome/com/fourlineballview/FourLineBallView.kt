@@ -109,4 +109,28 @@ class FourLineBallView(ctx : Context) : View(ctx) {
             state.startUpdating(startcb)
         }
     }
+
+    data class FLBRenderer (var view : FourLineBallView) {
+
+        val fourLineBall : FourLineBall = FourLineBall(0)
+
+        val animator : FLBAnimator = FLBAnimator(view)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#212121"))
+            fourLineBall.draw(canvas, paint)
+            animator.animate {
+                fourLineBall.update {
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            fourLineBall.startUpdating {
+                animator.start()
+            }
+        }
+
+    }
 }
