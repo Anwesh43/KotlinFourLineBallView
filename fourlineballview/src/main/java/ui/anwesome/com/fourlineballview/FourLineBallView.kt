@@ -93,6 +93,9 @@ class FourLineBallView(ctx : Context) : View(ctx) {
             val x_gap : Float = w/6
             var x_start : Float =  -3 * x_gap/2
             var x_orig = x_start
+            paint.color = Color.parseColor("#00C853")
+            paint.strokeWidth = r/5
+            paint.strokeCap = Paint.Cap.ROUND
             canvas.save()
             canvas.translate(w/2, h/2)
             for (i in 0..3) {
