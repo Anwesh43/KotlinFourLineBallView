@@ -4,6 +4,7 @@ package ui.anwesome.com.fourlineballview
  * Created by anweshmishra on 12/04/18.
  */
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.*
 import android.view.View
@@ -136,6 +137,12 @@ class FourLineBallView(ctx : Context) : View(ctx) {
                 animator.start()
             }
         }
-
+    }
+    companion object {
+        fun create(activity : Activity) : FourLineBallView {
+            val view : FourLineBallView = FourLineBallView(activity)
+            activity.setContentView(view)
+            return view
+        }
     }
 }
