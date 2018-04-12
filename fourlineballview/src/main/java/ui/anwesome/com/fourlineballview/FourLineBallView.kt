@@ -22,4 +22,30 @@ class FourLineBallView(ctx : Context) : View(ctx) {
         }
         return true
     }
+
+    data class FLBState (var prevScale : Float = 0f, var j : Int = 0, var dir : Float = 0f) {
+
+        private val scales : Array<Float> = arrayOf(0f, 0f, 0f, 0f, 0f)
+
+        fun update(stopcb : (Float) -> Unit) {
+            scales[this.j] += 0.1f * this.dir
+            if (Math.abs(this.scales[this.j] - this.prevScale) > 1) {
+                scales[this.j] = prevScale + dir
+                this.j += this.dir.toInt()
+                if (this.j == scales.size || this.j == -1) {
+                    this.j -= this.dir.toInt()
+                    this.dir = 0f
+                    this.prevScale = this.scales[this.j]
+                    stopcb(this.prevScale)
+                }
+            }
+        }
+
+        fun startUpdating(startcb : () -> Unit) {
+            if (this.dir == 0f) {
+                this.dir = 1 - 2 * this.prevScale
+                startcb()
+            }
+        }
+    }
 }
