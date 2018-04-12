@@ -25,7 +25,7 @@ class FourLineBallView(ctx : Context) : View(ctx) {
 
     data class FLBState (var prevScale : Float = 0f, var j : Int = 0, var dir : Float = 0f) {
 
-        private val scales : Array<Float> = arrayOf(0f, 0f, 0f, 0f, 0f)
+        val scales : Array<Float> = arrayOf(0f, 0f, 0f, 0f, 0f,0f)
 
         fun update(stopcb : (Float) -> Unit) {
             scales[this.j] += 0.1f * this.dir
@@ -75,6 +75,38 @@ class FourLineBallView(ctx : Context) : View(ctx) {
             if (animated) {
                 animated = false
             }
+        }
+    }
+
+    data class FourLineBall (var i : Int = 0, private val state : FLBState = FLBState()) {
+        fun draw(canvas : Canvas, paint : Paint) {
+            val w : Float = canvas.width.toFloat()
+            val h : Float = canvas.height.toFloat()
+            val h_size : Float = (h/3) * this.state.scales[0]
+            val r : Float = Math.min(w,h)/15
+            val x_gap : Float = w/6
+            var x_start : Float =  -3 * x_gap/2
+            var x_orig = x_start
+            canvas.save()
+            canvas.translate(w/2, h/2)
+            for (i in 0..3) {
+                val x_size : Float = (x_start) * this.state.scales[1]
+                canvas.drawLine(x_size, -h_size, x_size, h_size, paint)
+                x_start += x_gap
+                if (i > 0) {
+                    x_orig += x_gap * this.state.scales[3 + (i-1)]
+                }
+            }
+            canvas.drawCircle(x_orig, 0f, r * this.state.scales[2], paint)
+            canvas.restore()
+        }
+
+        fun update(stopcb : (Float) -> Unit) {
+            state.update(stopcb)
+        }
+
+        fun startUpdating(startcb : () -> Unit) {
+            state.startUpdating(startcb)
         }
     }
 }
